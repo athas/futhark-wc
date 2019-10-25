@@ -1,3 +1,5 @@
+#define _POSIX_SOURCE // For fileno().
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
