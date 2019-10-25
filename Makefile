@@ -5,7 +5,13 @@ else
 OPENCL_LDFLAGS?=-lOpenCL
 endif
 
+.PHONY: clean run
+
 all: wc-c wc-opencl huge.txt
+
+run: wc-c wc-opencl huge.txt
+	./wc-c -t huge.txt
+	./wc-opencl -t huge.txt
 
 libwc-opencl.c libwc-opencl.h: libwc.fut
 	futhark opencl --library libwc.fut -o libwc-opencl
@@ -21,8 +27,6 @@ wc-opencl: wc.c libwc-opencl.c libwc-opencl.h
 
 huge.txt: big.txt
 	cat big.txt big.txt big.txt big.txt big.txt big.txt big.txt big.txt big.txt big.txt big.txt big.txt big.txt big.txt big.txt big.txt > huge.txt
-
-.PHONY: clean
 
 clean:
 	rm -f wc-* libwc-*.c libwc-*.h huge.txt

@@ -54,15 +54,11 @@ int main(int argc, char** argv) {
     futhark_new_u8_1d(ctx, data, n);
   assert(arr != NULL);
 
-  struct futhark_opaque_counts *counts;
-  futhark_entry_wc(ctx, &counts, arr);
-
   int chars, words, lines;
-  futhark_entry_counts(ctx, &chars, &words, &lines, counts);
+  futhark_entry_wc(ctx, &chars, &words, &lines, arr);
 
-  printf(" %d %d %d %s\n", lines, words, chars, argv[1]);
+  printf(" %d %d %d %s\n", lines, words, chars, filename);
 
-  futhark_free_opaque_counts(ctx, counts);
   futhark_free_u8_1d(ctx, arr);
   futhark_context_free(ctx);
   futhark_context_config_free(cfg);

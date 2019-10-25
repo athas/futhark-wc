@@ -14,7 +14,7 @@ let flux_mappend (x: flux) (y: flux): flux =
 
 let flux_mempty : flux = #unknown
 
-let is_space (c: u8) = c == 10 || c == 32
+let is_space (c: u8) = c == 9 || c == 10 || c == 32
 
 let flux (c: u8) : flux =
   if is_space c
@@ -36,14 +36,15 @@ let counts_mempty : counts =
 let count_char (c: u8) : counts =
   { chars = 1, words = flux c, lines = if c == 10 then 1 else 0 }
 
-entry wc (cs: []u8) : counts =
+entry wc (cs: []u8) : (i32, i32, i32) =
   cs
   |> map count_char
   |> reduce counts_mappend counts_mempty
+  |> \counts ->
+       (counts.chars,
 
-entry counts (counts: counts) =
-  (counts.chars,
-   match counts.words
-   case #unknown -> 0
-   case #flux _ words _ -> words,
-   counts.lines)
+        match counts.words
+        case #unknown -> 0
+        case #flux _ words _ -> words,
+
+        counts.lines)
