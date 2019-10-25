@@ -1,0 +1,4 @@
+wc-*
+libwc-*.c
+libwc-*.h
+huge.txt
