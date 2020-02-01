@@ -36,15 +36,13 @@ let counts_mempty : counts =
 let count_char (c: u8) : counts =
   { chars = 1, words = flux c, lines = if c == 10 then 1 else 0 }
 
-entry wc (cs: []u8) : (i32, i32, i32) =
-  cs
-  |> map count_char
-  |> reduce counts_mappend counts_mempty
-  |> \counts ->
-       (counts.chars,
+entry wc [n] (cs: [n]u8) : (i32, i32, i32) =
+  (length cs,
 
-        match counts.words
-        case #unknown -> 0
-        case #flux _ words _ -> words,
+   map3 (\i prev this ->
+           i32.bool ((i == 0 && !(is_space this))
+                     || is_space prev && !(is_space this)))
+        (iota n) cs (rotate 1 cs)
+   |> i32.sum,
 
-        counts.lines)
+   cs |> map ((==10) >-> i32.bool) |> i32.sum)
