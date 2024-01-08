@@ -37,7 +37,7 @@ let count_char (c: u8) : counts =
   { chars = 1, words = flux c, lines = if c == 10 then 1 else 0 }
 
 entry wc [n] (cs: [n]u8) : (i32, i32, i32) =
-  (length cs,
+  (i32.i64 (length cs),
 
    map3 (\i prev this ->
            i32.bool ((i == 0 && !(is_space this))
